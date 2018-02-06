@@ -3,17 +3,22 @@ const express = require('express'),
     util = require('util'),
     md5 = require('md5'),
     app = express(),
+    https = require("https"),
+    fs = require("fs"),
     { Client } = require('pg'),
+    helmet = require('helmet'),
     config = require("./config.json");
 
 //app.use(bodyParser.urlencoded());
 function errorType (er) {
     this.Reason = er;
 }
-
+const tlsOptions = {
+    key: fs.readFileSync(config.TLSKeyLocation),
+    cert: fs.readFileSync(config.TLSCertLocation)
+  };
+app.use(helmet());
 app.use(bodyParser.json());
-  //  db = require("./db/db"),
-  //  servidorController = require("./controllers/servidor");
 
 const client = new Client({
   database : config.DatabaseName,
@@ -118,6 +123,7 @@ app.post("/api/servidor/", (req, res) => {
     })
 })
 
-app.listen(config.HttpPort);
+//app.listen(config.HttpPort);
+https.createServer(tlsOptions, app).listen(config.HttpsPort);
 
-console.log('todo list RESTful API server started on: ' + config.HttpPort);
+console.log('NodeJS Express API running on port: ' + config.HttpsPort);
