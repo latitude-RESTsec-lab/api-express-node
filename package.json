@@ -22,7 +22,13 @@
   },
   "homepage": "https://github.com/latitude-RESTsec-lab/api-node#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "pg": "^7.4.1"
+    "fs": "0.0.1-security",
+    "helmet": "^3.11.0",
+    "https": "^1.0.0",
+    "md5": "^2.2.1",
+    "pg": "^7.4.1",
+    "util": "^0.10.3"
   }
 }
