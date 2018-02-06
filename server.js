@@ -1,7 +1,15 @@
 const express = require('express'),
+    bodyParser = require('body-parser'),
     app = express(),
     { Client } = require('pg'),
     config = require("./config.json");
+
+//app.use(bodyParser.urlencoded());
+function errorType (er) {
+    this.Reason = er;
+}
+
+app.use(bodyParser.json());
   //  db = require("./db/db"),
   //  servidorController = require("./controllers/servidor");
 
@@ -13,6 +21,7 @@ const client = new Client({
   password : config.DatabasePassword,
 })
 client.connect()
+
 
 app.get("/api/servidores", (req, res) => {
     q = `select s.id_servidor, s.siape, s.id_pessoa, s.matricula_interna, s.nome_identificacao,
@@ -45,7 +54,48 @@ app.get("/api/servidores", (req, res) => {
 //         }
 //     })
 // })
-// app.route("/api/servidor/").postt(servidorController.postServidor())
+app.post("/api/servidor/", (req, res) => {
+    errorList = []
+    regexCheck = false
+    if (! /^(19[0-9]{2}|2[0-9]{3})-(0[1-9]|1[012])-([123]0|[012][1-9]|31)$/.test(req.body.data_nascimento)){
+        errorList.push(new errorType("[data_nascimento] failed to match API requirements. It should look like this: 1969-02-12") )
+        regexCheck = true
+    } else if (false){
+        regexCheck = true
+    }
+    if (!/^([A-Z][a-z]+([ ]?[a-z]?['-]?[A-Z][a-z]+)*)$/.test(req.body.nome)){
+        regexCheck = true
+    } else if (false) {
+        regexCheck = true
+    }
+    if (!/^([A-Z][a-z]+([ ]?[a-z]?['-]?[A-Z][a-z]+)*)$/.test(req.body.nome_identificacao)){
+        regexCheck = true
+    } else if (false) {
+        regexCheck = true
+    }
+    if (!/\b[MF]{1}\b/.test(req.body.sexo)){
+        regexCheck = true
+    }
+    // if (!//.test(req.body.)){
+    // }
+    // if (!//.test(req.body.)){
+    // }
+    // if (!//.test(req.body.)){
+    // }
+    // if (!//.test(req.body.)){
+    // }
+
+
+    
+    res.send(errorList)
+
+    // q=util.format(`INSERT INTO rh.servidor_tmp(
+	// 		nome, nome_identificacao, siape, id_pessoa, matricula_interna, id_foto,
+	// 		data_nascimento, sexo)
+	// 		VALUES ('%s', '%s', %d, %d, %d, null, '%s', '%s');
+	// 		`, ser.Nome, ser.Nomeidentificacao, ser.Siape, ser.Idpessoa, ser.Matriculainterna,
+	// 	ser.Datanascimento, ser.Sexo)
+})
 
 app.listen(config.HttpPort);
 
