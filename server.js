@@ -24,6 +24,10 @@ app.get("/api/servidores", (req, res) => {
             res.status(500)
             res.send("err")
         } else {
+            for(var i=0; i<result.rowCount; i++){
+                var data = new Date(result.rows[i].data_nascimento).toISOString().replace(/[A-Z]([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9][A-Z]/, "");
+                result.rows[i].data_nascimento=data;
+            }
             console.log("Querry Successful\n"+q)
             res.status(200)
             res.send(result.rows) 
@@ -40,7 +44,10 @@ app.get("/api/servidor/:mat", (req, res) => {
              res.status(500)
              res.send(err)
          } else {
-             console.log(req.query.mat)
+            for(var i=0; i<result.rowCount; i++){
+                var data = new Date(result.rows[i].data_nascimento).toISOString().replace(/[A-Z]([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9].[0-9][0-9][0-9][A-Z]/, "");
+                result.rows[i].data_nascimento=data;
+            }
              console.log("Querry Successful\n"+q)
              res.status(200)
              res.send(result.rows) 
