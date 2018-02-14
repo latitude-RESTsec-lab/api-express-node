@@ -4,7 +4,8 @@
   "description": "RESTful service for benchmark and study",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,8 @@
   "homepage": "https://github.com/latitude-RESTsec-lab/api-node#readme",
   "dependencies": {
     "express": "^4.16.2",
-    "pg": "^7.4.1"
-  }
+    "pg": "^7.4.1",
+    "util": "^0.10.3"
+  },
+  "devDependencies": {}
 }

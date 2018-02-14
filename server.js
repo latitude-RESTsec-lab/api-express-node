@@ -1,7 +1,8 @@
 const express = require('express'),
     app = express(),
+    util = require('util'),
     { Client } = require('pg'),
-    config = require("./config.json");
+    config = require("./config.model.json");
   //  db = require("./db/db"),
   //  servidorController = require("./controllers/servidor");
 
@@ -29,23 +30,24 @@ app.get("/api/servidores", (req, res) => {
         }
     })
 })
-// app.get("/api/servidor/:mat", (req, res) => {
-//     q = `select s.id_servidor, s.siape, s.id_pessoa, s.matricula_interna, s.nome_identificacao,
-//         p.nome, p.data_nascimento, p.sexo from rh.servidor s
-//         inner join comum.pessoa p on (s.id_pessoa =`+ "'10070'" +`)`    
-//     req.params.mat
-//     client.query(q, (err, result) => {
-//         if (err){
-//             res.status(500)
-//             res.send("err")
-//         } else {
-//             console.log("Querry Successful\n"+q)
-//             res.status(200)
-//             res.send(result.rows) 
-//         }
-//     })
-// })
-// app.route("/api/servidor/").postt(servidorController.postServidor())
+app.get("/api/servidor/:mat", (req, res) => {
+     q = util.format(`select s.id_servidor, s.siape, s.id_pessoa, s.matricula_interna, s.nome_identificacao,
+     p.nome, p.data_nascimento, p.sexo from rh.servidor s
+    inner join comum.pessoa p on (s.id_pessoa = p.id_pessoa)
+     where s.matricula_interna = %s`, req.params.mat)
+     client.query(q, (err, result) => {
+         if (err){
+             res.status(500)
+             res.send(err)
+         } else {
+             console.log(req.query.mat)
+             console.log("Querry Successful\n"+q)
+             res.status(200)
+             res.send(result.rows) 
+         }
+     })
+ })
+
 
 app.listen(config.HttpPort);
 

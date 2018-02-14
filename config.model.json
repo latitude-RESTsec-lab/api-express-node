@@ -1,14 +1,14 @@
 {
     "Debug": "true",
     "LogLocation": "./server.log",
-    "HttpPort": "80",
-    "HttpsPort": "443",
+    "HttpPort": "8080",
+    "HttpsPort": "8443",
     "TLSKeyLocation": "./devssl/server.key",
     "TLSCertLocation": "./devssl/server.pem",
-    "DatabaseUser" : "user",
-    "DatabasePassword" : "pass",
-    "DatabaseName" : "name",
-    "DatabaseHost" : "localhost",
+    "DatabaseUser" : "sipac",
+    "DatabasePassword" : "1qaz2wsxsipac",
+    "DatabaseName" : "administrativo",
+    "DatabaseHost" : "10.30.0.10",
     "DatabasePort" : "5432"
 
 }
