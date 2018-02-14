@@ -2,7 +2,7 @@ const express = require('express'),
     app = express(),
     util = require('util'),
     { Client } = require('pg'),
-    config = require("./config.model.json");
+    config = require("./config.json");
   //  db = require("./db/db"),
   //  servidorController = require("./controllers/servidor");
 
