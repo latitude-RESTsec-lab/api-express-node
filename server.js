@@ -9,17 +9,22 @@ const express = require('express'),
     helmet = require('helmet'),
     config = require("./config.json");
 
-//app.use(bodyParser.urlencoded());
+// Creation of Error Class
 function errorType (er) {
     this.Reason = er;
 };
+
+// Configuration of tls files location
 const tlsOptions = {
     key: fs.readFileSync(config.TLSKeyLocation),
     cert: fs.readFileSync(config.TLSCertLocation)
 };
+// Security middlewere (mostly headers)
 app.use(helmet());
+// Library for returning a json body
 app.use(bodyParser.json());
 
+//Database configuration
 const client = new Client({
 database : config.DatabaseName,
 host :     config.DatabaseHost,
@@ -27,9 +32,10 @@ port :     config.DatabasePort,
 user :     config.DatabaseUser,
 password : config.DatabasePassword,
 });
+//Database connection
 client.connect();
 
-
+//Get all route and handler
 app.get("/api/servidores", (req, res) => {
     q = `select s.id_servidor, s.siape, s.id_pessoa, s.matricula_interna, s.nome_identificacao,
         p.nome, p.data_nascimento, p.sexo from rh.servidor s
@@ -49,6 +55,7 @@ app.get("/api/servidores", (req, res) => {
         };
     });
 });
+//Get by ID route and handler
 app.get("/api/servidor/:mat", (req, res) => {
     q = util.format(`select s.id_servidor, s.siape, s.id_pessoa, s.matricula_interna, s.nome_identificacao,
     p.nome, p.data_nascimento, p.sexo from rh.servidor s
@@ -69,10 +76,11 @@ app.get("/api/servidor/:mat", (req, res) => {
         }
     });
 });
-
+//Post route and handler
 app.post("/api/servidor/", (req, res) => {
     errorList = [];
     regexCheck = false;
+    //BEGIN validations
     if (! /^(19[0-9]{2}|2[0-9]{3})-(0[1-9]|1[012])-([123]0|[012][1-9]|31)$/.test(req.body.data_nascimento)){
         errorList.push(new errorType("[data_nascimento] missing or failed to match API requirements. It should look like this: 1969-02-12"));
         regexCheck = true;
@@ -111,7 +119,9 @@ app.post("/api/servidor/", (req, res) => {
         res.status(400);
         res.send(errorList);
     }
+    //END validations
 
+    //Generating random id from hash
     bid = parseInt(md5(req.body.nome_identificacao+new Date().toString()), 16) % 999999;
     q= util.format(`INSERT INTO rh.servidor_tmp(
             nome, nome_identificacao, siape, id_pessoa, matricula_interna, id_foto,
@@ -132,7 +142,8 @@ app.post("/api/servidor/", (req, res) => {
     });
 });
 
-//app.listen(config.HttpPort);
+//app.listen(config.HttpPort);  //HTTP version
+//HTTPS server starting
 https.createServer(tlsOptions, app).listen(config.HttpsPort);
 
 console.log('NodeJS Express API running on port: ' + config.HttpsPort);
