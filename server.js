@@ -60,7 +60,7 @@ app.get('/api/servidor/:mat', (req, res) => {
     var q = util.format(`select s.id_servidor, s.siape, s.id_pessoa, s.matricula_interna, s.nome_identificacao,
     p.nome, p.data_nascimento, p.sexo from rh.servidor s
     inner join comum.pessoa p on (s.id_pessoa = p.id_pessoa)
-    where s.matricula_interna = %s`, req.params.mat);
+    where s.siape = %s`, req.params.mat);
     client.query(q, (err, result) => {
         if (err){
             res.status(500);
